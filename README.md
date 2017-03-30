@@ -1,8 +1,6 @@
 # SchoenefHtmlToPdfBundle
 A simple bundle to add html 2 pdf service provider in a simple way to your symfony project
 
-[_TOC_]
-
 ## Installation
 
 ### Step 1: Download the Bundle
