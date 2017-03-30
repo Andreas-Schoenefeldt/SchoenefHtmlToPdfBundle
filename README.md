@@ -46,7 +46,7 @@ class AppKernel extends Kernel
 
 ### Step 3: Configure the Bundle
 
-Add the following configuration to your ```app/cofig/config.yml```:
+Add the following configuration to your ```app/config/config.yml```:
 ```yml
 schoenef_html_to_pdf:
   provider: pdfrocket
@@ -54,7 +54,7 @@ schoenef_html_to_pdf:
   apikey: "%html_to_pdf_apikey%"
 ```
 
-And to your ```app/cofig/parameter.yml```:
+And to your ```app/config/parameter.yml```:
 ```yml
 parameters:
   ...
