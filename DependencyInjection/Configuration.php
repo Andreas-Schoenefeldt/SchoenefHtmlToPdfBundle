@@ -31,7 +31,8 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('html2pdf');
+        // the root must be the name of the bundle: http://stackoverflow.com/a/35505189/2776727
+        $rootNode = $treeBuilder->root('html_to_pdf');
 
         $rootNode
             ->children()

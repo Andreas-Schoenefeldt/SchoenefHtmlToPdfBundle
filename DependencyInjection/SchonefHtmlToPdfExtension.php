@@ -30,10 +30,10 @@ class SchonefHtmlToPdfExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
         foreach ($config as $key => $value) {
             if (!is_array($value)) {
-                $container->setParameter('html2pdf.' . $key, $value);
+                $container->setParameter('html_to_pdf.' . $key, $value);
             } else {
                 foreach ($value as $k => $v) {
-                    $container->setParameter('html2pdf.' . $key . '.' . $k, $v);
+                    $container->setParameter('html_to_pdf.' . $key . '.' . $k, $v);
                 }
             }
         }

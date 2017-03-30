@@ -50,17 +50,17 @@ class AppKernel extends Kernel
 
 Add the following configuration to your ```app/cofig/config.yml```:
 ```yml
-html2pdf:
+html_to_pdf:
   provider: pdfrocket
   timeout: 20
-  apikey: "%html2pdf_apikey%"
+  apikey: "%html_to_pdf_apikey%"
 ```
 
 And to your ```app/cofig/parameter.yml```:
 ```yml
 parameters:
   ...
-  html2pdf_apikey: yourApiKey
+  html_to_pdf_apikey: yourApiKey
 ```
 
 #### Available configuration options
