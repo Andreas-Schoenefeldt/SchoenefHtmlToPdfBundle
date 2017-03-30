@@ -1,0 +1,4 @@
+services:
+  html2pdf.connector:
+    class: Schoenef\HtmlToPdfBundle\Service\Html2PdfConnector
+    arguments: ['%html2pdf%']
