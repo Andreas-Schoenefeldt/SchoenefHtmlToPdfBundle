@@ -32,21 +32,14 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         // the root must be the name of the bundle: http://stackoverflow.com/a/35505189/2776727
-        $rootNode = $treeBuilder->root('html_to_pdf');
+        $rootNode = $treeBuilder->root('schoenef_html_to_pdf');
 
         $rootNode
             ->children()
-                ->scalarNode('provider')
-                    ->defaultValue('pdfrocket')
-                ->end()
-                ->scalarNode('timeout')
-                    ->defaultValue(20)
-                ->end()
-                ->scalarNode('apikey')
-                    ->isRequired()
-                ->end()
-            ->end()
-        ->end();
+                ->scalarNode('provider')->defaultValue('pdfrocket')->end()
+                ->scalarNode('timeout')->defaultValue(20)->end()
+                ->scalarNode('apikey')->isRequired()->end()
+            ->end();
         return $treeBuilder;
     }
 }

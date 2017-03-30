@@ -28,6 +28,9 @@ class SchonefHtmlToPdfExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter('schoenef_html_to_pdf', $config['schoenef_html_to_pdf']);
+        /*
         foreach ($config as $key => $value) {
             if (!is_array($value)) {
                 $container->setParameter('html_to_pdf.' . $key, $value);
@@ -37,6 +40,7 @@ class SchonefHtmlToPdfExtension extends Extension
                 }
             }
         }
+        */
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
     }

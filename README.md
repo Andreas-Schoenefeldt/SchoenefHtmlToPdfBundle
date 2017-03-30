@@ -50,7 +50,7 @@ class AppKernel extends Kernel
 
 Add the following configuration to your ```app/cofig/config.yml```:
 ```yml
-html_to_pdf:
+schoenef_html_to_pdf:
   provider: pdfrocket
   timeout: 20
   apikey: "%html_to_pdf_apikey%"
