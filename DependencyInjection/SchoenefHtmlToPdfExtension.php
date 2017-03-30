@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Loader;
  * This is the class that loads and manages your bundle configuration
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class SchonefHtmlToPdfExtension extends Extension
+class SchoenefHtmlToPdfExtension extends Extension
 {
 
     /**
@@ -29,18 +29,8 @@ class SchonefHtmlToPdfExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('schoenef_html_to_pdf', $config['schoenef_html_to_pdf']);
-        /*
-        foreach ($config as $key => $value) {
-            if (!is_array($value)) {
-                $container->setParameter('html_to_pdf.' . $key, $value);
-            } else {
-                foreach ($value as $k => $v) {
-                    $container->setParameter('html_to_pdf.' . $key . '.' . $k, $v);
-                }
-            }
-        }
-        */
+        $container->setParameter('schoenef_html_to_pdf', $config);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
     }
