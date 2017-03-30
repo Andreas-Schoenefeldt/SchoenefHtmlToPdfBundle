@@ -68,3 +68,12 @@ parameters:
 1. **provider**: default: pdfrocket - no other value available at the moment
 1. **timeout**: default: 20 - the timeout in seconds of a single http call
 1. **apikey**: The api key you got from your provider to turn html pages into pdf
+
+### Usage
+
+To use the html to pdf connector and save pdf files, you can use the following inside of symfony controllers:
+
+```php
+$connector = $this->get('html2pdf.connector');
+$connector->saveUrlAsPdf('http://some.url', 'some/file/path.pdf');
+```

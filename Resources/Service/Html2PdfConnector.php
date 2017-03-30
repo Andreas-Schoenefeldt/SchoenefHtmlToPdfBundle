@@ -43,7 +43,7 @@ class Html2PdfConnector {
      * @param string $filePath if set, the result will be saved to the
      * @return bool
      */
-    public function saveUrlToFile($url, $filePath){
+    public function saveUrlAsPdf($url, $filePath){
 
         $response = $this->client->request('GET', '/pdf', ['query' => [
             'apikey' => $this->config['apikey'],
