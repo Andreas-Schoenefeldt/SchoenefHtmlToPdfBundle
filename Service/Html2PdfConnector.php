@@ -98,6 +98,9 @@ class Html2PdfConnector {
                         case Configuration::OPTION_IMAGE_QUALITY:
                             $providerOptions['ImageQuality'] = $value;
                             break;
+                        case Configuration::OPTION_ZOOM:
+                            $providerOptions['Zoom'] = $value;
+                            break;
                     }
                 }
 

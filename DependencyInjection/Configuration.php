@@ -38,6 +38,7 @@ class Configuration implements ConfigurationInterface
     const OPTION_SHRINKING = 'shrinking';
     const OPTION_IMAGE_QUALITY = 'image_quality';
     const OPTION_PAGE_SIZE = 'page_size';
+    const OPTION_ZOOM = 'zoom';
 
     /**
      * {@inheritdoc}
@@ -56,6 +57,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode(self::KEY_DEFAULT_OPTIONS)
                     ->children()
                         ->integerNode(self::OPTION_DPI)->end()
+                        ->floatNode(self::OPTION_ZOOM)->end()
                         ->booleanNode(self::OPTION_SHRINKING)->defaultTrue()->end()
                         ->integerNode(self::OPTION_IMAGE_QUALITY)->end()
                         ->enumNode(self::OPTION_PAGE_SIZE)->values(self::pageSizes)->end()
