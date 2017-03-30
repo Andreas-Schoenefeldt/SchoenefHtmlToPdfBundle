@@ -52,6 +52,11 @@ schoenef_html_to_pdf:
   provider: pdfrocket
   timeout: 20
   apikey: "%html_to_pdf_apikey%"
+  default_options:
+     shrinking: false
+     dpi: 300
+     image_quality: 100
+     page_size: A4
 ```
 
 And to your ```app/config/parameter.yml```:
@@ -66,6 +71,11 @@ parameters:
 1. **provider**: default: pdfrocket - no other value available at the moment
 1. **timeout**: default: 20 - the timeout in seconds of a single http call
 1. **apikey**: The api key you got from your provider to turn html pages into pdf
+1. **default_options**: mapping of [pdf options](https://www.html2pdfrocket.com/#htmltopdf)
+   1. *shrinking* | (boolean) - if set to false, smart-shrinking is dissabled
+   1. *dpi* | (integer) - allows to set the dpi
+   1. *image_quality* | (integer) - allows to define the image quality
+   1. *page_size* | (enum) - allows to define the pdf page size - ```A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 B0 B1 B1 B2 B3 B4 B5 B6 B7 B8 B9 C5E Comm10E DLE Executive Folio Ledger Legal Letter Tabloid``` 
 
 ### Usage
 
@@ -73,5 +83,5 @@ To use the html to pdf connector and save pdf files, you can use the following i
 
 ```php
 $connector = $this->get('html2pdf.connector');
-$connector->saveUrlAsPdf('http://some.url', 'some/file/path.pdf');
+$connector->saveUrlAsPdf('http://some.url', 'some/file/path.pdf', ['dpi' => 96]);
 ```
