@@ -1,0 +1,21 @@
+{
+  "name": "schoenef/html-to-pdf-bundle",
+  "type": "symfony-bundle",
+  "description": "A simple bundle to add html 2 pdf service provider in a simple way to your symfony project.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andreas Schönefeldt",
+      "email": "schoenefeldt.andreas@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Schoenef\\HtmlToPdfBundle\\": ""
+    }
+  },
+  "require": {
+    "php": ">=5.6"
+  }
+}
+
