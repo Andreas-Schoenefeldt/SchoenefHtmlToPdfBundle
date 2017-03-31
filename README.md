@@ -1,5 +1,7 @@
 # SchoenefHtmlToPdfBundle
-A simple bundle to add html 2 pdf service provider in a simple way to your symfony project
+A simple bundle to add html 2 pdf service provider in a simple way to your symfony project. Currently it supports:
+
+ - [html2pdfrocket.com](https://www.html2pdfrocket.com)
 
 ## Installation
 
@@ -84,6 +86,6 @@ parameters:
 To use the html to pdf connector and save pdf files, you can use the following inside of symfony controllers:
 
 ```php
-$connector = $this->get('html2pdf.connector');
+$connector = $this->get('schoenef_html_to_pdf.connector');
 $connector->saveUrlAsPdf('http://some.url', 'some/file/path.pdf', ['dpi' => 96]);
 ```
