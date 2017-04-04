@@ -15,16 +15,36 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class Html2PdfConnector {
 
+    const providerBaseURIs = [
+        Configuration::PROVIDER_PDF_ROCKET => 'http://api.html2pdfrocket.com'
+    ];
+
+    const providerConfigurationMapping = [
+        Configuration::PROVIDER_PDF_ROCKET => [
+            Configuration::OPTION_PAGE_SIZE => 'PageSize',
+            Configuration::OPTION_SHRINKING => 'DisableShrinking',
+            Configuration::OPTION_DPI => 'Dpi',
+            Configuration::OPTION_IMAGE_QUALITY => 'ImageQuality',
+            Configuration::OPTION_ZOOM => 'Zoom',
+            Configuration::OPTION_JS_DELAY => 'JavascriptDelay'
+        ]
+    ];
+
     private $config;
 
     private $client;
 
-    const providerBaseURIs = [
-            'pdfrocket' => 'http://api.html2pdfrocket.com'
-        ];
 
-    public function __construct(array $conectorConfig){
-        $this->config = $conectorConfig;
+    /** @var string */
+    private $provider = ''; // the current provider
+    /** @var array */
+    private $configurationMapping = []; // the mapping of the current provider
+
+    public function __construct(array $connectorConfig){
+        $this->config = $connectorConfig;
+
+        $this->provider = $this->config[Configuration::KEY_PROVIDER];
+        $this->configurationMapping = self::providerConfigurationMapping[$this->provider];
 
         $this->client = new Client([
             // Base URI is used with relative requests
@@ -71,8 +91,10 @@ class Html2PdfConnector {
 
         $finalOptions = array_merge($this->config[Configuration::KEY_DEFAULT_OPTIONS], $pdfOptions);
 
+
         // validation
         if (array_key_exists(Configuration::OPTION_PAGE_SIZE, $finalOptions) && ! in_array($finalOptions[Configuration::OPTION_PAGE_SIZE], Configuration::pageSizes)) {
+            $value = $finalOptions[Configuration::OPTION_PAGE_SIZE];
             throw new \Exception("$value is not a allowed " . Configuration::OPTION_PAGE_SIZE);
         }
 
@@ -80,26 +102,24 @@ class Html2PdfConnector {
 
 
         // This is now the mapping to pdfrocket, might have to move into its dedicated class at some point
-        switch ($this->config[Configuration::KEY_PROVIDER]){
-            case Configuration::PROVIDER_PDFROCKET:
+        switch ($this->provider){
+            case Configuration::PROVIDER_PDF_ROCKET:
                 foreach ($finalOptions as $key => $value) {
+
+                    if (! array_key_exists($key, $this->configurationMapping)   ) {
+                        throw new \Exception("$key is not a valid configuration for $this->provider");
+                    }
+
+                    $providerOption = $this->configurationMapping[$key];
+
                     switch ($key) {
-                        case Configuration::OPTION_PAGE_SIZE:
-                            $providerOptions['PageSize'] = $value;
+                        default:
+                            $providerOptions[$providerOption] = $value;
                             break;
                         case Configuration::OPTION_SHRINKING:
                             if (! $value) {
-                                $providerOptions['DisableShrinking'] = 'true';
+                                $providerOptions[$providerOption] = 'true';
                             }
-                            break;
-                        case Configuration::OPTION_DPI:
-                            $providerOptions['Dpi'] = $value;
-                            break;
-                        case Configuration::OPTION_IMAGE_QUALITY:
-                            $providerOptions['ImageQuality'] = $value;
-                            break;
-                        case Configuration::OPTION_ZOOM:
-                            $providerOptions['Zoom'] = $value;
                             break;
                     }
                 }

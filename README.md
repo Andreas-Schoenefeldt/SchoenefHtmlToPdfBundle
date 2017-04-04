@@ -60,6 +60,7 @@ schoenef_html_to_pdf:
      image_quality: 100
      page_size: A4
      zoom: 1.2
+     js_delay: 500
 ```
 
 And to your ```app/config/parameter.yml```:
@@ -80,6 +81,7 @@ parameters:
    1. *image_quality* | (integer) - allows to define the image quality
    1. *page_size* | (enum) - allows to define the pdf page size - ```A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 B0 B1 B1 B2 B3 B4 B5 B6 B7 B8 B9 C5E Comm10E DLE Executive Folio Ledger Legal Letter Tabloid```
    1. *zoom* | (float) - a float number, to zoom the page 
+   1. *js_delay* | (integer) - render delay in milliseconds - good to allow the load of external fonts are ajax requests to finish
 
 ### Usage
 
