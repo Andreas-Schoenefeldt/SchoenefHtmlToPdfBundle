@@ -16,7 +16,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class Html2PdfConnector {
 
     const providerBaseURIs = [
-        Configuration::PROVIDER_PDF_ROCKET => 'http://api.html2pdfrocket.com'
+        Configuration::PROVIDER_PDF_ROCKET => 'https://api.html2pdfrocket.com'
     ];
 
     const providerConfigurationMapping = [
