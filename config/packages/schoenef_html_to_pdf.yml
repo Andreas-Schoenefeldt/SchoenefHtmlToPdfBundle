@@ -1,0 +1,10 @@
+schoenef_html_to_pdf:
+  provider: pdfrocket
+  timeout: 40
+  apikey: "%html2pdf_apikey%"
+  default_options:
+    shrinking: false
+    dpi: 300
+    image_quality: 100
+    page_size: A4
+    zoom: 1.335

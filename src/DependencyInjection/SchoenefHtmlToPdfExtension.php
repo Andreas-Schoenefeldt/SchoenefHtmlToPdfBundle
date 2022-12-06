@@ -31,7 +31,7 @@ class SchoenefHtmlToPdfExtension extends Extension
 
         $container->setParameter('schoenef_html_to_pdf', $config);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.yml');
     }
 

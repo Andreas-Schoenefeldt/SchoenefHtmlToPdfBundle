@@ -1,5 +1,5 @@
 # SchoenefHtmlToPdfBundle
-A simple bundle to add html 2 pdf service provider in a simple way to your symfony project. Currently it supports:
+A simple bundle to add html 2 pdf service provider in a simple way to your symfony project. Currently, it supports:
 
  - [html2pdfrocket.com](https://www.html2pdfrocket.com)
 
