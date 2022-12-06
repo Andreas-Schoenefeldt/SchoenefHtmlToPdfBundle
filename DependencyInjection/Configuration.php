@@ -43,13 +43,11 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        // the root must be the name of the bundle: http://stackoverflow.com/a/35505189/2776727
-        $rootNode = $treeBuilder->root('schoenef_html_to_pdf');
+        $treeBuilder = new TreeBuilder('schoenef_html_to_pdf');
 
-        $rootNode
+        $treeBuilder->getRootNode()
             ->children()
                 ->enumNode(self::KEY_PROVIDER)->values([self::PROVIDER_PDF_ROCKET])->defaultValue(self::PROVIDER_PDF_ROCKET)->end()
                 ->integerNode(self::KEY_TIMEOUT)->defaultValue(20)->end()

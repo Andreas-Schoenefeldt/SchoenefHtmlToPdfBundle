@@ -11,13 +11,13 @@
   ],
   "autoload": {
     "psr-4": {
-      "Schoenef\\HtmlToPdfBundle\\": ""
+      "Schoenef\\HtmlToPdfBundle\\": "src/"
     }
   },
   "require": {
-    "php": ">=5.6",
-    "symfony/framework-bundle": ">=2",
-    "guzzlehttp/guzzle": "~6.0"
+    "php": ">=8.1",
+    "symfony/framework-bundle": "6.2.*",
+    "guzzlehttp/guzzle": "^6.0 | ^7.0"
   }
 }
 
