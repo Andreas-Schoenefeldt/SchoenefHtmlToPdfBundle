@@ -1,7 +1,7 @@
 schoenef_html_to_pdf:
   provider: pdfrocket
   timeout: 40
-  apikey: "%html2pdf_apikey%"
+  apikey: "%env(resolve:HTML2PDF_API_KEY)%"
   default_options:
     shrinking: false
     dpi: 300
