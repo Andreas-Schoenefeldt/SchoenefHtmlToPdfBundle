@@ -2,9 +2,8 @@
 
 namespace Schoenef\HtmlToPdfBundle;
 
-use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class SchoenefHtmlToPdfBundle extends AbstractBundle
-{
+class SchoenefHtmlToPdfBundle extends Bundle {
 
 }
