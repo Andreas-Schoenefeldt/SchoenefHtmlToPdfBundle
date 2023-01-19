@@ -10,23 +10,23 @@ namespace Schoenef\HtmlToPdfBundle\Service;
 
 
 use GuzzleHttp\Client;
-use Schoenef\HtmlToPdfBundle\DependencyInjection\Configuration;
+use Schoenef\HtmlToPdfBundle\SchoenefHtmlToPdfBundle;
 use Symfony\Component\Filesystem\Filesystem;
 
 class Html2PdfConnector {
 
     const providerBaseURIs = [
-        Configuration::PROVIDER_PDF_ROCKET => 'https://api.html2pdfrocket.com'
+        SchoenefHtmlToPdfBundle::PROVIDER_PDF_ROCKET => 'https://api.html2pdfrocket.com'
     ];
 
-    const providerConfigurationMapping = [
-        Configuration::PROVIDER_PDF_ROCKET => [
-            Configuration::OPTION_PAGE_SIZE => 'PageSize',
-            Configuration::OPTION_SHRINKING => 'DisableShrinking',
-            Configuration::OPTION_DPI => 'Dpi',
-            Configuration::OPTION_IMAGE_QUALITY => 'ImageQuality',
-            Configuration::OPTION_ZOOM => 'Zoom',
-            Configuration::OPTION_JS_DELAY => 'JavascriptDelay'
+    const providerSchoenefHtmlToPdfBundleMapping = [
+        SchoenefHtmlToPdfBundle::PROVIDER_PDF_ROCKET => [
+            SchoenefHtmlToPdfBundle::OPTION_PAGE_SIZE => 'PageSize',
+            SchoenefHtmlToPdfBundle::OPTION_SHRINKING => 'DisableShrinking',
+            SchoenefHtmlToPdfBundle::OPTION_DPI => 'Dpi',
+            SchoenefHtmlToPdfBundle::OPTION_IMAGE_QUALITY => 'ImageQuality',
+            SchoenefHtmlToPdfBundle::OPTION_ZOOM => 'Zoom',
+            SchoenefHtmlToPdfBundle::OPTION_JS_DELAY => 'JavascriptDelay'
         ]
     ];
 
@@ -38,19 +38,19 @@ class Html2PdfConnector {
     /** @var string */
     private $provider = ''; // the current provider
     /** @var array */
-    private $configurationMapping = []; // the mapping of the current provider
+    private $SchoenefHtmlToPdfBundleMapping = []; // the mapping of the current provider
 
     public function __construct(array $connectorConfig){
         $this->config = $connectorConfig;
 
-        $this->provider = $this->config[Configuration::KEY_PROVIDER];
-        $this->configurationMapping = self::providerConfigurationMapping[$this->provider];
+        $this->provider = $this->config[SchoenefHtmlToPdfBundle::KEY_PROVIDER];
+        $this->SchoenefHtmlToPdfBundleMapping = self::providerSchoenefHtmlToPdfBundleMapping[$this->provider];
 
         $this->client = new Client([
             // Base URI is used with relative requests
-            'base_uri' => self::providerBaseURIs[$this->config[Configuration::KEY_PROVIDER]],
+            'base_uri' => self::providerBaseURIs[$this->config[SchoenefHtmlToPdfBundle::KEY_PROVIDER]],
             // You can set any number of default request options.
-            'timeout'  => $this->config[Configuration::KEY_TIMEOUT],
+            'timeout'  => $this->config[SchoenefHtmlToPdfBundle::KEY_TIMEOUT],
         ]);
     }
 
@@ -63,7 +63,7 @@ class Html2PdfConnector {
     public function saveUrlAsPdf($url, $filePath, $pdfOptions = array()){
 
         $providerOptions = $this->getRequestOptions($pdfOptions);
-        $providerOptions['apikey'] = $this->config[Configuration::KEY_APIKEY];
+        $providerOptions['apikey'] = $this->config[SchoenefHtmlToPdfBundle::KEY_APIKEY];
         $providerOptions['value'] = $url;
 
         $response = $this->client->request('GET', '/pdf', ['query' => $providerOptions]);
@@ -89,13 +89,13 @@ class Html2PdfConnector {
 
     private function getRequestOptions($pdfOptions = array()) {
 
-        $finalOptions = array_merge($this->config[Configuration::KEY_DEFAULT_OPTIONS], $pdfOptions);
+        $finalOptions = array_merge($this->config[SchoenefHtmlToPdfBundle::KEY_DEFAULT_OPTIONS], $pdfOptions);
 
 
         // validation
-        if (array_key_exists(Configuration::OPTION_PAGE_SIZE, $finalOptions) && ! in_array($finalOptions[Configuration::OPTION_PAGE_SIZE], Configuration::pageSizes)) {
-            $value = $finalOptions[Configuration::OPTION_PAGE_SIZE];
-            throw new \Exception("$value is not a allowed " . Configuration::OPTION_PAGE_SIZE);
+        if (array_key_exists(SchoenefHtmlToPdfBundle::OPTION_PAGE_SIZE, $finalOptions) && ! in_array($finalOptions[SchoenefHtmlToPdfBundle::OPTION_PAGE_SIZE], SchoenefHtmlToPdfBundle::pageSizes)) {
+            $value = $finalOptions[SchoenefHtmlToPdfBundle::OPTION_PAGE_SIZE];
+            throw new \Exception("$value is not a allowed " . SchoenefHtmlToPdfBundle::OPTION_PAGE_SIZE);
         }
 
         $providerOptions = [];
@@ -103,20 +103,20 @@ class Html2PdfConnector {
 
         // This is now the mapping to pdfrocket, might have to move into its dedicated class at some point
         switch ($this->provider){
-            case Configuration::PROVIDER_PDF_ROCKET:
+            case SchoenefHtmlToPdfBundle::PROVIDER_PDF_ROCKET:
                 foreach ($finalOptions as $key => $value) {
 
-                    if (! array_key_exists($key, $this->configurationMapping)   ) {
-                        throw new \Exception("$key is not a valid configuration for $this->provider");
+                    if (! array_key_exists($key, $this->SchoenefHtmlToPdfBundleMapping)   ) {
+                        throw new \Exception("$key is not a valid SchoenefHtmlToPdfBundle for $this->provider");
                     }
 
-                    $providerOption = $this->configurationMapping[$key];
+                    $providerOption = $this->SchoenefHtmlToPdfBundleMapping[$key];
 
                     switch ($key) {
                         default:
                             $providerOptions[$providerOption] = $value;
                             break;
-                        case Configuration::OPTION_SHRINKING:
+                        case SchoenefHtmlToPdfBundle::OPTION_SHRINKING:
                             if (! $value) {
                                 $providerOptions[$providerOption] = 'true';
                             }
