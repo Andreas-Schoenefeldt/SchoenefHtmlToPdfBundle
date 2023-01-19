@@ -12,7 +12,7 @@ Open a command console, enter your project directory and execute the
 following command to download the latest stable version of this bundle:
 
 ```console
-$ composer require schoenef/html-to-pdf-bundle:~1.0
+$ composer require schoenef/html-to-pdf-bundle:~2.0
 ```
 
 This command requires you to have Composer installed globally, as explained
@@ -21,34 +21,24 @@ of the Composer documentation.
 
 ### Step 2: Enable the Bundle
 
-Then, enable the bundle by adding it to the list of registered bundles
-in the `app/AppKernel.php` file of your project:
+Then, if not happening automatically, enable the bundle by adding it to the list of registered bundles
+in the `cofig/bundles.php` file of your project:
 
 ```php
 <?php
-// app/AppKernel.php
+// cofig/bundles.php
 
 // ...
-class AppKernel extends Kernel
-{
-    public function registerBundles()
-    {
-        $bundles = array(
-            // ...
-
-            new Schoenef\HtmlToPdfBundle\SchoenefHtmlToPdfBundle(), // takes care of html to pdf conversion via third party services
-        );
-
-        // ...
-    }
-
-    // ...
-}
+return [
+  // ...
+  Schoenef\HtmlToPdfBundle\SchoenefHtmlToPdfBundle::class => ['all' => true],
+  // ...
+]
 ```
 
 ### Step 3: Configure the Bundle
 
-Add the following configuration to your ```app/config/config.yml```:
+Add the following configuration to your ```config/packages/schoenef_html_to_pdf.yaml```:
 ```yml
 schoenef_html_to_pdf:
   provider: pdfrocket
@@ -63,11 +53,9 @@ schoenef_html_to_pdf:
      js_delay: 500
 ```
 
-And to your ```app/config/parameter.yml```:
+And to your ```.env```:
 ```yml
-parameters:
-  ...
-  html_to_pdf_apikey: yourApiKey
+HTML_TO_PDF_API_KEY=change_me
 ```
 
 #### Available configuration options
@@ -85,9 +73,24 @@ parameters:
 
 ### Usage
 
-To use the html to pdf connector and save pdf files, you can use the following inside of symfony controllers:
+Inject the Service then in the __construct of cour controller or service.
 
 ```php
-$connector = $this->get('schoenef_html_to_pdf.connector');
-$connector->saveUrlAsPdf('http://some.url', 'some/file/path.pdf', ['dpi' => 96]);
+<?php
+
+namespace App\Service;
+
+use Schoenef\HtmlToPdfBundle\Service\Html2PdfConnector;
+
+class MyService {
+
+   public function __construct(
+       private readonly Html2PdfConnector $html2PdfConnector,
+   ) {}
+   
+   public function toPdf () {
+       $this->html2PdfConnector->saveUrlAsPdf('http://some.url', 'some/file/path.pdf', ['dpi' => 96]);
+   }
+
+}
 ```
