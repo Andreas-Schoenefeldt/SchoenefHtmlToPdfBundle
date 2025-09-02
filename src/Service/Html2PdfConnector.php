@@ -10,6 +10,8 @@ namespace Schoenef\HtmlToPdfBundle\Service;
 
 
 use GuzzleHttp\Client;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Schoenef\HtmlToPdfBundle\SchoenefHtmlToPdfBundle;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -34,14 +36,17 @@ class Html2PdfConnector {
 
     private $client;
 
+    /** @var LoggerInterface */
+    private $logger;
 
     /** @var string */
     private $provider = ''; // the current provider
     /** @var array */
     private $SchoenefHtmlToPdfBundleMapping = []; // the mapping of the current provider
 
-    public function __construct(array $connectorConfig){
+    public function __construct(array $connectorConfig, LoggerInterface $logger = null){
         $this->config = $connectorConfig;
+        $this->logger = $logger ?: new NullLogger();
 
         $this->provider = $this->config[SchoenefHtmlToPdfBundle::KEY_PROVIDER];
         $this->SchoenefHtmlToPdfBundleMapping = self::providerSchoenefHtmlToPdfBundleMapping[$this->provider];
@@ -66,21 +71,38 @@ class Html2PdfConnector {
         $providerOptions['apikey'] = $this->config[SchoenefHtmlToPdfBundle::KEY_APIKEY];
         $providerOptions['value'] = $url;
 
-        $response = $this->client->request('GET', '/pdf', ['query' => $providerOptions]);
-        
-        if ($response->getStatusCode() == '200') {
+        try {
 
-            if ($filePath) {
-                $fs = new Filesystem();
-                // check if file exists - always regenerate for now
-                if ($fs->exists($filePath)) {
-                    $fs->remove($filePath);
+            $response = $this->client->request('GET', '/pdf', ['query' => $providerOptions]);
+
+            if ($response->getStatusCode() == '200') {
+
+                if ($filePath) {
+                    $fs = new Filesystem();
+                    // check if file exists - always regenerate for now
+                    if ($fs->exists($filePath)) {
+                        $fs->remove($filePath);
+                    }
+
+                    $fs->dumpFile($filePath, $response->getBody());
                 }
 
-                $fs->dumpFile($filePath, $response->getBody());
+                return true;
+            } else {
+                $this->logger->warning('PDF generation failed with non-200 status code', [
+                    'url' => $url,
+                    'status_code' => $response->getStatusCode(),
+                    'provider' => $this->provider
+                ]);
             }
-
-            return true;
+        } catch (\Exception $e) {
+            $this->logger->error('Exception occurred during PDF generation', [
+                'url' => $url,
+                'provider' => $this->provider,
+                'exception' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
         }
 
         return false;
@@ -95,6 +117,10 @@ class Html2PdfConnector {
         // validation
         if (array_key_exists(SchoenefHtmlToPdfBundle::OPTION_PAGE_SIZE, $finalOptions) && ! in_array($finalOptions[SchoenefHtmlToPdfBundle::OPTION_PAGE_SIZE], SchoenefHtmlToPdfBundle::pageSizes)) {
             $value = $finalOptions[SchoenefHtmlToPdfBundle::OPTION_PAGE_SIZE];
+            $this->logger->error('Invalid page size provided', [
+                'provided_value' => $value,
+                'allowed_values' => SchoenefHtmlToPdfBundle::pageSizes
+            ]);
             throw new \Exception("$value is not a allowed " . SchoenefHtmlToPdfBundle::OPTION_PAGE_SIZE);
         }
 
@@ -107,6 +133,11 @@ class Html2PdfConnector {
                 foreach ($finalOptions as $key => $value) {
 
                     if (! array_key_exists($key, $this->SchoenefHtmlToPdfBundleMapping)   ) {
+                        $this->logger->error('Invalid option provided for provider', [
+                            'option' => $key,
+                            'provider' => $this->provider,
+                            'valid_options' => array_keys($this->SchoenefHtmlToPdfBundleMapping)
+                        ]);
                         throw new \Exception("$key is not a valid SchoenefHtmlToPdfBundle for $this->provider");
                     }
 

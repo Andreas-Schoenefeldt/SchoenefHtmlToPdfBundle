@@ -49,9 +49,10 @@ class SchoenefHtmlToPdfBundle extends AbstractBundle
 
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
+        // Register the configuration as a parameter for use in services.yml
+        $container->parameters()->set('schoenef_html_to_pdf.config', $config);
+
         // load an XML, PHP or Yaml file
         $container->import('../config/services.yml');
-
-        $container->services()->get(Html2PdfConnector::class)->arg(0, $config);
     }
 }

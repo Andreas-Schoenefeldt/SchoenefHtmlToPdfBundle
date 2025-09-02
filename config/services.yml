@@ -1,2 +1,5 @@
 services:
   Schoenef\HtmlToPdfBundle\Service\Html2PdfConnector:
+    arguments:
+      $connectorConfig: '%schoenef_html_to_pdf.config%'
+      $logger: '@?logger'
